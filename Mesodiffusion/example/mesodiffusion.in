@@ -1,0 +1,65 @@
+# SPPARKS vacancy 'diffusion' model 
+# let N=128
+# Simulation temperature
+# kT="1.0"
+# Volume fraction of voids
+# F="0.1"
+# spk_flame.gnu -var kT $kT -var N $N  -var F $F < vacancy_diffusion.in
+
+seed		 56689
+
+app_style	 mesodiffusion 2.2e12 10.0 0.062415  5 2   # 22e-05 cm^2/s^-1, 1.0e-07 cm, 1.0J/m^2=6.2415e14 eV/cm^2
+
+# 3d cubic lattice; Each site has 6 neighbors
+
+dimension	 3
+boundary         p p n
+lattice		 sc/6n 10.0                      # has to be 4n otherwise site energy is incorrect 
+
+# Define lattice extent called 'square'; 
+region		 cell block 0 100 0 100 0 50
+
+# Define 'axis' aligned simulation domain on 'square'
+create_box	 cell
+
+create_sites     box
+
+# Creates sites on lattice defined above; also creates neighborhood list for each site
+region           substrate block INF INF INF INF INF 10
+
+region           cylinder cylinder z 50 50 10 INF 20
+
+region           electrode union 2 substrate cylinder
+region           electrolyte intersect 2 cell substrate side out
+
+set              site value 1 region electrolyte
+
+set              site value 2 region electrode
+
+# Initializes sites to '1' and a fraction of sites to '2'
+#set site value 1
+#set site value 2 fraction ${F}
+
+# Simulation temperature; Units of energy
+temperature	 0.025852      # 300K in eV
+
+# KMC solver
+solve_style      tree
+# sectors are required to run 'tree' kmc in parallel
+sector yes
+
+# Diagnostic style energy computes the total energy for all sites
+diag_style       energy
+
+# Print diagnostic information to screen 
+stats            1000.0
+
+# Write snapshot of site values to 'vacancy_diffusion.dump' 
+dump  1 text  1 test.dump  
+
+# Write 'image'; boundary between phases drawn with color = 0 0 0 aka 'black'
+#dump vacancy_diffusion_image image 5000 vacancy_diffusion.*.jpg site site crange 1 2 drange 1 1 view 0.0 0.0 boundary site 1 shape cube box no 1 zoom 1.95
+#dump_modify vacancy_diffusion_image boundcolor black backcolor white pad 4 
+
+# Run for 1 million *spparks* steps
+run              1000000
