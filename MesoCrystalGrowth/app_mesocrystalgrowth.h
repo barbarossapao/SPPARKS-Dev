@@ -12,12 +12,12 @@
 ------------------------------------------------------------------------- */
 
 #ifdef APP_CLASS
-AppStyle(membrane,AppMembrane)
+AppStyle(mesocrystalgrowth,AppMesoCrystalGrowth)
 
 #else
 
-#ifndef SPK_APP_MEMBRANE_H
-#define SPK_APP_MEMBRANE_H
+#ifndef SPK_APP_MESOCRYSTALGROWTH_H
+#define SPK_APP_MESOCRYSTALGROWTH_H
 
 #include "app_lattice.h"
 
