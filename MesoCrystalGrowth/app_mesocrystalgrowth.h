@@ -23,10 +23,10 @@ AppStyle(mesocrystalgrowth,AppMesoCrystalGrowth)
 
 namespace SPPARKS_NS {
 
-class AppMembrane : public AppLattice {
+class AppMesoCrystalGrowth : public AppLattice {
  public:
-  AppMembrane(class SPPARKS *, int, char **);
-  ~AppMembrane();
+  AppMesoCrystalGrowth(class SPPARKS *, int, char **);
+  ~AppMesoCrystalGrowth();
   void input_app(char *, int, char **);
   void grow_app();
   void init_app();
